@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+
+namespace WebApplication5.Controllers
+{
+    public class RoleController : Controller
+    {
+        RoleManager<IdentityRole> _user;
+
+        public RoleController(RoleManager<IdentityRole> user)
+        {
+            _user = user;
+        }
+        public IActionResult Index()
+        {
+            var roles = _user.Roles.ToList();
+            return View(roles);
+        }
+        public IActionResult Create()
+        {
+            return View(new IdentityRole());
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(IdentityRole newRoles)
+        {
+            await _user.CreateAsync(newRoles);
+            return RedirectToAction("Index");
+        }
+    }
+}
